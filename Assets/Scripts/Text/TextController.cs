@@ -1,37 +1,51 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Gameflakes.TurtleType.TextController
+namespace Gameflakes.TextMechanics
 {
     public sealed class TextController : MonoBehaviour, ITextHolder
     {
         private static readonly string DEFAULT_MESSAGE = "loading...";
         private Text textAnchor;
 
-        public void UpdateTextContent ( string newText )
+        public string UpdateTextContent ( string newText )
         {
             if ( newText == null )
             {
                 throw new System.ArgumentNullException ( );
             }
 
-            textAnchor.text = newText;
+            string holder = textAnchor.text;
+
+            if ( newText == "" )
+            {
+                textAnchor.text = "";
+                return holder;
+            }
+
+            textAnchor.text = string.Copy ( newText );
+            return holder;
+        }
+
+        public string ClearTextContent ( )
+        {
+            return UpdateTextContent ( "" );
         }
 
         public string GetTextContent ( )
         {
-            return textAnchor.text;
+            return string.Copy ( textAnchor.text );
         }
 
         // Called only once in a game's lifetime.
         private void Awake ( )
         {
-            InitializeReferenceAndSetMessageToDefaultMessage();
+            InitializeReferenceAndSetMessageToDefaultMessage ( );
         }
 
         private void InitializeReferenceAndSetMessageToDefaultMessage ( )
         {
-            textAnchor = GetComponent<Text>();
+            textAnchor = GetComponent<Text> ( );
             textAnchor.text = DEFAULT_MESSAGE;
         }
     }

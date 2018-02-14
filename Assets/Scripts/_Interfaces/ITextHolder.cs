@@ -1,5 +1,5 @@
 ﻿
-namespace Gameflakes.TurtleType.TextController
+namespace Gameflakes.TextMechanics
 {
     public interface ITextHolder
     {
@@ -13,10 +13,23 @@ namespace Gameflakes.TurtleType.TextController
         /// is going to be used to update the class Text element's content;
         /// </param>
         /// 
+        /// <returns>
+        /// Returns the replaced Text element's content.
+        /// </returns>
+        /// 
         /// <exception cref="System.ArgumentNullException">
-        /// Throws an exception if the string ref is null.
+        /// Throws an exception if the string reference is null.
         /// </exception> 
-        void UpdateTextContent ( string newText );
+        string UpdateTextContent ( string newText );
+
+        /// <summary>
+        /// Clear the class Text element's content.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// Returns the replaced Text element's content.
+        /// </returns>
+        string ClearTextContent ( );
 
         /// <summary>
         /// Get the class Text element's content.

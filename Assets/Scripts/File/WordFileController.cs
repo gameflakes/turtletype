@@ -3,8 +3,15 @@ using System.IO;
 
 namespace Gameflakes.TurtleType.FileController
 {
-    public sealed class WordFileController
+    public sealed class WordFileController : IWordFileReader
     {
+        private WordFileController ( ) { }
+        private static readonly IWordFileReader singletonInstance = new WordFileController ( );
+        public static IWordFileReader GetSingletonInstance ( )
+        {
+            return singletonInstance;
+        }
+
         private static readonly string BASE_PATH = Application.dataPath + "/Words/";
 
         private static readonly int MIN_NUMBER_OF_LETTERS = 4;
@@ -13,14 +20,15 @@ namespace Gameflakes.TurtleType.FileController
         private static readonly int MIN_NUMBER_OF_WORDS = 1;
         private static readonly int MAX_NUMBER_OF_WORDS = 500;
 
-        public string [ ] ReadSpecificFileAndGetRandomWords ( int numberOfLetters, int numberOfWords )
+        // doc. on IWordFileReader
+        public string [ ] ReadSpecificFileAndGetRandomWords ( int numberOfWords, int numberOfLetters )
         {
             if ( numberOfLetters < MIN_NUMBER_OF_LETTERS || numberOfLetters > MAX_NUMBER_OF_LETTERS )
             {
                 throw new System.ArgumentOutOfRangeException ( numberOfLetters + " is out of range." );
             }
 
-            if ( numberOfWords < MIN_NUMBER_OF_WORDS || numberOfWords > MIN_NUMBER_OF_WORDS )
+            if ( numberOfWords < MIN_NUMBER_OF_WORDS || numberOfWords > MAX_NUMBER_OF_WORDS )
             {
                 throw new System.ArgumentOutOfRangeException ( numberOfWords + " is out of range." );
             }
@@ -71,7 +79,7 @@ namespace Gameflakes.TurtleType.FileController
                 throw new System.ArgumentOutOfRangeException ( "A parameter is out of range." );
             }
 
-            if ( start < end )
+            if ( start >= end )
             {
                 throw new System.ArgumentOutOfRangeException ( start + " should be greater than or equal to " + end + ".");
             }

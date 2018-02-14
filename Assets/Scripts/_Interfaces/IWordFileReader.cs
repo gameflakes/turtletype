@@ -1,7 +1,7 @@
 ﻿
 namespace Gameflakes.TurtleType.FileController
 {
-    public interface IFileWordReader
+    public interface IWordFileReader
     {
         /// <summary>
         /// It is used to retrieve an array of n non repeated words,
