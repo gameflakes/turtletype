@@ -15,13 +15,13 @@ namespace Gameflakes.TurtleType.FileController
         private static readonly string BASE_PATH = Application.dataPath + "/Words/";
 
         private static readonly int MIN_NUMBER_OF_LETTERS = 4;
-        private static readonly int MAX_NUMBER_OF_LETTERS = 10;
+        private static readonly int MAX_NUMBER_OF_LETTERS = 8;
 
         private static readonly int MIN_NUMBER_OF_WORDS = 1;
         private static readonly int MAX_NUMBER_OF_WORDS = 500;
 
         // doc. on IWordFileReader
-        public string [ ] ReadSpecificFileAndGetRandomWords ( int numberOfWords, int numberOfLetters )
+        public string[ ] ReadSpecificFileAndGetRandomWords ( int numberOfWords, int numberOfLetters )
         {
             if ( numberOfLetters < MIN_NUMBER_OF_LETTERS || numberOfLetters > MAX_NUMBER_OF_LETTERS )
             {
@@ -33,15 +33,19 @@ namespace Gameflakes.TurtleType.FileController
                 throw new System.ArgumentOutOfRangeException ( numberOfWords + " is out of range." );
             }
 
-            int [ ] indexes = GetRandomNumbersBasedOnIntervals ( numberOfWords, MIN_NUMBER_OF_WORDS, MAX_NUMBER_OF_WORDS );
-            string [ ] words = new string [ numberOfWords ];
+            int[ ] indexes = GetRandomNumbersBasedOnIntervals ( numberOfWords, MIN_NUMBER_OF_WORDS - 1, MAX_NUMBER_OF_WORDS - 1 );
+            for ( int i = 0; i < indexes.Length; i++ )
+            {
+                Debug.Log( "index " + indexes[ i ] );
+            }
+            string[ ] words = new string[ numberOfWords ];
 
             string fileName = GetFileNameByNumberOfLetters ( numberOfLetters );
-            string [ ] lines = File.ReadAllLines ( BASE_PATH + fileName );
+            string[ ] lines = File.ReadAllLines ( BASE_PATH + fileName );
 
             for ( int i = 0; i < indexes.Length; i++ )
             {
-                words [ i ] = lines [ indexes [ i ] ];
+                words[ i ] = lines[ indexes[ i ] ].ToLower ( );
             }
 
             return words;
@@ -74,7 +78,7 @@ namespace Gameflakes.TurtleType.FileController
         /// </exception>
         private int [ ] GetRandomNumbersBasedOnIntervals ( int numberOfRandomNumbersDesired, int start, int end )
         {
-            if ( numberOfRandomNumbersDesired <= 0 || start <= 0 || end <= 0 )
+            if ( numberOfRandomNumbersDesired <= 0 || start < 0 || end < 0 )
             {
                 throw new System.ArgumentOutOfRangeException ( "A parameter is out of range." );
             }
@@ -96,10 +100,12 @@ namespace Gameflakes.TurtleType.FileController
 
             for ( int i = 0; i < numberOfRandomNumbersDesired; i++ )
             {
-                int endOfRange = start + offsetOfIntervals * ( i + 1 );
+                int endOfRange = start + offsetOfIntervals;
                 while ( endOfRange > end ) endOfRange--;
 
                 numbers [ i ] = (int) Random.Range ( start, endOfRange );
+
+                start += offsetOfIntervals;
             }
 
             return numbers;
@@ -135,11 +141,7 @@ namespace Gameflakes.TurtleType.FileController
                 case 7:
                     return "sevenLetterWords.txt";
                 case 8:
-                    return "EightLetterWords.txt";
-                case 9:
-                    return "nineLetterWords.txt";
-                case 10:
-                    return "tenLetterWords.txt";
+                    return "eightLetterWords.txt";
             }
 
             throw new CustomException.FileNotFoundException ( numberOfLetters + " letters words' list not found." );

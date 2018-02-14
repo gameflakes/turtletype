@@ -61,7 +61,7 @@ cook
 cool
 cope
 copy
-CORE
+core
 cost
 crew
 crop
@@ -156,7 +156,7 @@ glad
 goal
 goes
 gold
-Golf
+golf
 gone
 good
 gray
