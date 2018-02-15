@@ -112,6 +112,11 @@ namespace Gameflakes.TurtleType.LevelController
             return currentTurnTimeLeft <= 0.0f;
         }
 
+        public float GetCurrentTime ( )
+        {
+            return currentTurnTimeLeft;
+        }
+
         private void UpdateCurrentTurnTime ( )
         {
             currentTurnTimeLeft -= Time.deltaTime;

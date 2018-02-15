@@ -36,6 +36,11 @@ namespace Gameflakes.InputSetup
 
         }
 
+        public void DeactivateOrActivateInput ( )
+        {
+            enabled = !enabled;
+        }
+
         private void Awake ( )
         {
             gsm = gameObject.GetComponent<GameSystemManager> ( );

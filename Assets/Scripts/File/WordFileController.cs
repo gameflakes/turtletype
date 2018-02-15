@@ -34,10 +34,6 @@ namespace Gameflakes.TurtleType.FileController
             }
 
             int[ ] indexes = GetRandomNumbersBasedOnIntervals ( numberOfWords, MIN_NUMBER_OF_WORDS - 1, MAX_NUMBER_OF_WORDS - 1 );
-            for ( int i = 0; i < indexes.Length; i++ )
-            {
-                Debug.Log( "index " + indexes[ i ] );
-            }
             string[ ] words = new string[ numberOfWords ];
 
             string fileName = GetFileNameByNumberOfLetters ( numberOfLetters );

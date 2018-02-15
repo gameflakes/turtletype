@@ -4,6 +4,7 @@ using Gameflakes.TurtleType.FileController;
 using Gameflakes.TurtleType.TextModifications;
 using Gameflakes.TurtleType.LevelController;
 
+using Gameflakes.HealthSystem;
 using Gameflakes.InputSetup;
 
 namespace Gameflakes.TurtleType.GameController
@@ -24,18 +25,23 @@ namespace Gameflakes.TurtleType.GameController
         IGameStates gameStateController;
         IWordFileReader wordFileReader;
         IInputConfiguration inputManager;
+        IHealthSystem healthController;
 
         // Dependencies to classes directly
         int levelCounter = 0;
         LevelManager levelManager;
         TextManager textManager;
 
-        private void Awake()
+        private void Awake ( )
         {
             gameStateController = GameStateController.GetSingletonInstance ( );
             wordFileReader = WordFileController.GetSingletonInstance ( );
+            healthController = HealthController.GetSingletonInstance ( );
+            healthController.InitializeHealth ( );
 
-            textManager = GameObject.Find("TextAnchor").GetComponent<TextManager> ( );
+            textManager = GameObject.Find ( "TextAnchor" ).GetComponent<TextManager> ( );
+            textManager.HealthUpdate ( healthController.GetHealth ( ) );
+
             inputManager = gameObject.GetComponent<InputManager> ( );
             levelManager = gameObject.GetComponent<LevelManager> ( );
         }
@@ -43,8 +49,14 @@ namespace Gameflakes.TurtleType.GameController
         // Implement Main Loop
         private void Update ( )
         {
-            // First level creation. (It's not on Start() because I don't realy know exactly how it works)
-            if ( levelCounter >= 1 ) return;
+            // Send new time to UI
+            if ( levelCounter >= 1 )
+            {
+                textManager.UpdateTime ( levelManager.GetCurrentTime ( ) );
+                return;
+            }
+
+            // First level creation
             LoadLevel ( );
         }
 
@@ -135,7 +147,17 @@ namespace Gameflakes.TurtleType.GameController
         private void TextFailed ( )
         {
             // do something on UI and on health system as well.
-            textManager.ResetWord ( );
+
+            healthController.TakeDamage ( 1 );
+            textManager.HealthUpdate ( healthController.GetHealth ( ) );
+            if ( healthController.IsItDead ( ) )
+            {
+                textManager.LostGameMessage ( );
+                inputManager.DeactivateOrActivateInput ( );
+                return;
+            }
+
+            textManager.ResetWord();
         }
 
         // Update on UI and, maybe, Health
@@ -149,7 +171,17 @@ namespace Gameflakes.TurtleType.GameController
         private void LevelSuceed ( )
         {
             // do something on UI and, maybe, on health system as well.
+
+            if ( levelCounter >= LevelCharacteristics.NUMBER_OF_LEVELS )
+            {
+                // Won the game
+                textManager.FinishGameMessage ( );
+                return;
+            }
+
             LoadLevel ( );
+            healthController.HealDamage ( 1 );
+            textManager.HealthUpdate ( healthController.GetHealth ( ) );
         }
     }
 }

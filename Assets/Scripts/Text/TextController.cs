@@ -5,8 +5,7 @@ namespace Gameflakes.TextMechanics
 {
     public sealed class TextController : MonoBehaviour, ITextHolder
     {
-        private static readonly string DEFAULT_MESSAGE = "loading...";
-        private Text textAnchor;
+        public Text textObject;
 
         public string UpdateTextContent ( string newText )
         {
@@ -15,15 +14,15 @@ namespace Gameflakes.TextMechanics
                 throw new System.ArgumentNullException ( );
             }
 
-            string holder = textAnchor.text;
+            string holder = textObject.text;
 
             if ( newText == "" )
             {
-                textAnchor.text = "";
+                textObject.text = "";
                 return holder;
             }
 
-            textAnchor.text = string.Copy ( newText );
+            textObject.text = string.Copy ( newText );
             return holder;
         }
 
@@ -34,19 +33,7 @@ namespace Gameflakes.TextMechanics
 
         public string GetTextContent ( )
         {
-            return string.Copy ( textAnchor.text );
-        }
-
-        // Called only once in a game's lifetime.
-        private void Awake ( )
-        {
-            InitializeReferenceAndSetMessageToDefaultMessage ( );
-        }
-
-        private void InitializeReferenceAndSetMessageToDefaultMessage ( )
-        {
-            textAnchor = GetComponent<Text> ( );
-            textAnchor.text = DEFAULT_MESSAGE;
+            return string.Copy ( textObject.text );
         }
     }
 }

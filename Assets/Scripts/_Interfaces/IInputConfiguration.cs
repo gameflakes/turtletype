@@ -29,5 +29,8 @@ namespace Gameflakes.InputSetup
         /// Throws ArgumentOutOfRangeException if the array of strings given is null or empty.
         /// </exception>
         void SetValidKeys ( char[ ] keys );
+
+        // Change the script active state.
+        void DeactivateOrActivateInput ( );
     }
 }

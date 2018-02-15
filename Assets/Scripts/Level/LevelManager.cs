@@ -52,6 +52,11 @@ namespace Gameflakes.TurtleType.LevelController
             }
         }
 
+        public float GetCurrentTime ( )
+        {
+            return currentLevel.GetCurrentTime ( );
+        }
+
         private void Update ( )
         {
             if ( !levelHasBegun )
